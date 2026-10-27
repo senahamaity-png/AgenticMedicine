@@ -30,7 +30,8 @@ function MedicineDetails() {
 
       const response = await api.get(`/medicines/${id}`);
 
-      setMedicine(response.data);
+      console.log("MEDICINE DETAILS RESPONSE:", response.data);
+setMedicine(response.data.medicine || response.data);
     } catch (err) {
       console.error(err);
 
@@ -157,9 +158,16 @@ function MedicineDetails() {
 
               {medicine.image ? (
                 <img
-                  src={medicine.image}
-                  alt={medicine.name}
-                />
+  src={
+    medicine.image?.startsWith("http")
+      ? medicine.image
+      : `${window.location.origin}${medicine.image}`
+  }
+  alt={medicine.name}
+  onError={(e) => {
+    console.error("Medicine image failed:", e.currentTarget.src);
+  }}
+/>
               ) : (
                 <div className="details-placeholder">
                   <Pill size={75} />
